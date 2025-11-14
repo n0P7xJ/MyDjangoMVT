@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Профіль користувача{% endblock %}
+{% block content %}
+<div class="row justify-content-center pt-5">
+  <div class="col-md-6 col-lg-4 text-center">
+    <h3 class="mb-4">Профіль</h3>
+    {% if user.profile.photo %}
+      <img src="{{ user.profile.photo.url }}" class="profile-photo mb-3" alt="User Photo">
+    {% endif %}
+    <p><strong>Логін:</strong> {{ user.username }}</p>
+    <p><strong>Ім'я:</strong> {{ user.first_name }}</p>
+    <p><strong>Прізвище:</strong> {{ user.last_name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    {% if user.profile.bio %}<p><strong>Bio:</strong> {{ user.profile.bio }}</p>{% endif %}
+    <a href="#" class="btn btn-outline-primary mt-3">Редагувати профіль</a>
+  </div>
+</div>
+{% endblock %}
