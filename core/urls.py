@@ -24,7 +24,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     # Додаткові маршрути додатків:
-    path('users/', include('users.urls')),
+    path('api/', include('users.urls')),
     path('categories/', include('categories.urls')),
     path('dishes/', include('dishes.urls')),
     # Головна
