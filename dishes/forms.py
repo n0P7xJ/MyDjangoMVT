@@ -1,13 +1,15 @@
 from django import forms
-from .models import Category
+from .models import Dish
 
-class CategoryForm(forms.ModelForm):
+class DishForm(forms.ModelForm):
     class Meta:
-        model = Category
-        fields = ['name', 'description', 'image']
-
-    def clean_image(self):
-        image = self.cleaned_data.get('image', None)
-        if image and not image.name.lower().endswith('.webp'):
-            raise forms.ValidationError('Only WEBP images are allowed!')
-        return image
+        model = Dish
+        fields = ['name', 'category', 'price', 'priority', 'image', 'description']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows':3, 'class':'form-control'}),
+            'name': forms.TextInput(attrs={'class':'form-control'}),
+            'price': forms.NumberInput(attrs={'class':'form-control'}),
+            'priority': forms.NumberInput(attrs={'class':'form-control'}),
+            'image': forms.ClearableFileInput(attrs={'class':'form-control'}),
+            'category': forms.Select(attrs={'class':'form-control'})
+        }

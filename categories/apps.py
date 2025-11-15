@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
-class DishesConfig(AppConfig):
+class CategoriesConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'dishes'
+    name = 'categories'

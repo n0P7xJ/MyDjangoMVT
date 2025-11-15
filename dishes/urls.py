@@ -1,9 +1,11 @@
 from django.urls import path
 from . import views
 
+app_name = 'dishes'
+
 urlpatterns = [
-    path('categories/new/', views.create_category, name='create_category'),
-    path('categories/<int:pk>/edit/', views.edit_category, name='edit_category'),
-    path('categories/<int:pk>/delete/', views.delete_category, name='delete_category'),
-    path('categories/', views.category_list, name='category_list'), # для списку категорій
+    path('', views.dish_list, name='list'),                  # /dishes/ - список страв
+    path('add/', views.dish_create, name='add'),             # /dishes/add/ - створити страву
+    path('<int:pk>/edit/', views.dish_update, name='edit'),  # /dishes/1/edit/ - редагувати
+    path('<int:pk>/delete/', views.dish_delete, name='delete'), # /dishes/1/delete/ - видалити
 ]

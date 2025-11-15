@@ -1,34 +1,38 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category
-from .forms import CategoryForm
+from .models import Dish
+from .forms import DishForm
 
-# Create
-def create_category(request):
+def dish_list(request):
+    dishes = Dish.objects.order_by('-priority', 'name')
+    return render(request, 'dishes/dish_list.html', {'dishes': dishes})
+
+
+def dish_create(request):
     if request.method == 'POST':
-        form = CategoryForm(request.POST, request.FILES)
+        form = DishForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('category_list')
+            return redirect('dish_list')
     else:
-        form = CategoryForm()
-    return render(request, 'dishes/category_form.html', {'form': form})
+        form = DishForm()
+    return render(request, 'dishes/dish_form.html', {'form': form, 'title': 'Додати страву'})
 
-# Edit
-def edit_category(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+
+def dish_update(request, pk):
+    dish = get_object_or_404(Dish, pk=pk)
     if request.method == 'POST':
-        form = CategoryForm(request.POST, request.FILES, instance=category)
+        form = DishForm(request.POST, request.FILES, instance=dish)
         if form.is_valid():
             form.save()
-            return redirect('category_list')
+            return redirect('dish_list')
     else:
-        form = CategoryForm(instance=category)
-    return render(request, 'dishes/category_form.html', {'form': form})
+        form = DishForm(instance=dish)
+    return render(request, 'dishes/dish_form.html', {'form': form, 'title': 'Редагувати страву'})
 
-# Delete
-def delete_category(request, pk):
-    category = get_object_or_404(Category, pk=pk)
+
+def dish_delete(request, pk):
+    dish = get_object_or_404(Dish, pk=pk)
     if request.method == 'POST':
-        category.delete()
-        return redirect('category_list')
-    return render(request, 'dishes/category_confirm_delete.html', {'category': category})
+        dish.delete()
+        return redirect('dish_list')
+    return render(request, 'dishes/dish_confirm_delete.html', {'dish': dish})

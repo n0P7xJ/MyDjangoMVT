@@ -1,26 +1,19 @@
-import os
-import uuid
 from django.db import models
-from django.utils.deconstruct import deconstructible
+from categories.models import Category
+from common.models import UniqueWebpPath
 
-@deconstructible
-class UniqueWebpPath(object):
-    def __call__(self, instance, filename):
-        ext = 'webp'
-        unique_name = f'{uuid.uuid4().hex}.{ext}'
-        return os.path.join('category_images/', unique_name)
-
-class Category(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    description = models.TextField(blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+class Dish(models.Model):
+    name = models.CharField(max_length=100)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='dishes')
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    priority = models.PositiveIntegerField(default=1)
     image = models.ImageField(upload_to=UniqueWebpPath(), blank=True, null=True)
+    description = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
-        verbose_name = "Category"
-        verbose_name_plural = "Categories"
-        ordering = ['name']
-        
+        verbose_name = "Dish"
+        verbose_name_plural = "Dishes"
+        ordering = ['priority', 'name']
