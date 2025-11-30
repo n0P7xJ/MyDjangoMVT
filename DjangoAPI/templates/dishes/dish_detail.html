@@ -1,0 +1,12 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ dish.name }}</h2>
+<p><b>Категорія:</b> {{ dish.category.name }}</p>
+<p><b>Ціна:</b> {{ dish.price }}</p>
+<p><b>Пріоритет:</b> {{ dish.priority }}</p>
+<p><b>Опис:</b> {{ dish.description }}</p>
+{% if dish.image %}<img src="{{ dish.image.url }}" style="max-width:300px">{% endif %}
+<br><a href="{% url 'dishes:edit' dish.pk %}" class="btn btn-info">Редагувати</a>
+<a href="{% url 'dishes:list' %}" class="btn btn-secondary">До списку</a>
+{% endblock %}

@@ -1,0 +1,37 @@
+
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Список страв</h2>
+<a href="{% url 'dishes:add' %}" class="btn btn-primary mb-3">Додати страву</a>
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Назва</th>
+      <th>Категорія</th>
+      <th>Ціна</th>
+      <th>Пріоритет</th>
+      <th>Фото</th>
+      <th>Дії</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for dish in dishes %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ dish.name }}</td>
+      <td>{{ dish.category.name }}</td>
+      <td>{{ dish.price }}</td>
+      <td>{{ dish.priority }}</td>
+      <td>{% if dish.image %}<img src="{{ dish.image.url }}" style="height:60px">{% endif %}</td>
+      <td>
+        <a href="{% url 'dishes:edit' dish.pk %}" class="btn btn-sm btn-info">Редагувати</a>
+        <a href="{% url 'dishes:delete' dish.pk %}" class="btn btn-sm btn-danger">Видалити</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="7">Страв поки немає.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

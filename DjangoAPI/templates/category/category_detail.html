@@ -1,0 +1,138 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ category.name }} - Django MVT{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card shadow">
+            <!-- Зображення та основна інформація -->
+            <div class="row g-0">
+                <div class="col-md-4">
+                    {% if category.image %}
+                        <img src="{{ category.image.url }}" 
+                             class="img-fluid rounded-start h-100" 
+                             alt="{{ category.name }}"
+                             style="object-fit: cover;">
+                    {% else %}
+                        <div class="bg-light d-flex align-items-center justify-content-center h-100">
+                            <i class="fas fa-tags fa-3x text-muted"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h1 class="card-title mb-3">
+                            <i class="fas fa-tag me-2 text-primary"></i>
+                            {{ category.name }}
+                        </h1>
+                        
+                        {% if category.description %}
+                            <div class="mb-3">
+                                <h5 class="text-muted">Опис</h5>
+                                <p class="lead">{{ category.description }}</p>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="row g-2 mb-3">
+                            <div class="col-sm-6">
+                                <small class="text-muted">
+                                    <i class="far fa-calendar-alt me-1"></i>
+                                    Створено: {{ category.created_at|date:"d.m.Y H:i" }}
+                                </small>
+                            </div>
+                            
+                            {% if category.updated_at %}
+                            <div class="col-sm-6">
+                                <small class="text-muted">
+                                    <i class="fas fa-edit me-1"></i>
+                                    Оновлено: {{ category.updated_at|date:"d.m.Y H:i" }}
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <a href="{{ category.get_update_url }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-edit me-2"></i>Редагувати
+                            </a>
+                            <a href="{{ category.get_delete_url }}" class="btn btn-outline-danger btn-sm">
+                                <i class="fas fa-trash me-2"></i>Видалити
+                            </a>
+                            <a href="{% url 'category_list' %}" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-arrow-left me-2"></i>До всіх категорій
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Пов'язані страви -->
+<h3 class="mt-5 mb-4">
+    <i class="fas fa-utensils me-2 text-warning"></i>
+    Страви в цій категорії
+</h3>
+
+<div class="row g-4 mb-4">
+    {% for dish in category.dishes.all %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-sm">
+                {% if dish.image %}
+                    <img src="{{ dish.image.url }}" class="card-img-top" alt="{{ dish.name }}" 
+                         style="height: 180px; object-fit: cover;">
+                {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                         style="height: 180px;">
+                        <i class="fas fa-utensils fa-3x text-muted"></i>
+                    </div>
+                {% endif %}
+                
+                <div class="card-body">
+                    <h6 class="card-title text-truncate">{{ dish.name }}</h6>
+                    <p class="card-text text-muted small mb-2">{{ dish.description|truncatewords:15 }}</p>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="h5 text-success mb-0">
+                            {{ dish.price }} грн
+                        </span>
+                        <span class="badge bg-light text-dark px-2 py-1">
+                            Пріоритет {{ dish.priority }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-footer bg-transparent border-0 pt-2">
+                    <a href="{% url 'dish_detail' dish.pk %}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-eye me-2"></i>Детальніше
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="col-12 text-center py-5">
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-utensils fa-4x text-muted mb-3"></i>
+                    <h5 class="text-muted">У цій категорії поки немає страв</h5>
+                    <p class="text-muted">Створіть першу страву для цієї категорії</p>
+                    <a href="{% url 'dish_create' %}?category={{ category.id }}" class="btn btn-outline-warning">
+                        <i class="fas fa-plus me-2"></i>Додати страву
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+<!-- Повернення до списку -->
+<div class="text-center mt-4">
+    <a href="{% url 'category_list' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left me-2"></i>Повернутися до категорій
+    </a>
+</div>
+{% endblock %}

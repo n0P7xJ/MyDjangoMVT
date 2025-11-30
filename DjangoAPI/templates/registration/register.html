@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}Реєстрація{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/registration.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="registration-container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="register-card">
+                <div class="card-header bg-primary text-white text-center py-4">
+                    <h3>Реєстрація</h3>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form id="register-form" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% include 'registration/components/group_input.html' with field_name='username' label='Ім\'я користувача' field_type='text' required=True %}
+                        
+                        {% include 'registration/components/group_input.html' with field_name='email' label='Email' field_type='email' required=True %}
+                        
+                        {% include 'registration/components/group_input.html' with field_name='password1' label='Пароль' field_type='password' required=True %}
+                        
+                        {% include 'registration/components/group_input.html' with field_name='password2' label='Підтвердження пароля' field_type='password' required=True %}
+                        
+                        <!-- Фото -->
+                        <div class="form-group">
+                            <label class="form-label">Фото профілю</label>
+                            <input type="file" name="photo" id="photo-input" class="form-control" accept="image/*">
+                        </div>
+                        
+                        <!-- Обрізач -->
+                        <div id="cropper-container" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div id="image-preview" class="border rounded p-3 bg-light">
+                                        <p class="text-center text-muted">Оберіть фото</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div id="cropped-preview" class="text-center">
+                                        <p class="text-muted">Превью</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="crop-controls mt-3">
+                                <button type="button" id="crop-btn" class="btn btn-success" disabled>Обрізати</button>
+                                <button type="button" id="reset-btn" class="btn btn-secondary" disabled>Скинути</button>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 mt-3">Зареєструватись</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'registration/components/loading.html' %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/registration.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,26 @@
+<div class="form-group">
+    <label for="{{ field_id|default:field_name }}">{{ label }}</label>
+    
+    {% if field_type == "textarea" %}
+        <textarea id="{{ field_id|default:field_name }}" name="{{ field_name }}" 
+                  class="form-control" placeholder="{{ placeholder|default:'' }}"
+                  {% if required %}required{% endif %}>{{ value|default:'' }}</textarea>
+    {% elif field_type == "select" %}
+        <select id="{{ field_id|default:field_name }}" name="{{ field_name }}" 
+                class="form-control" {% if required %}required{% endif %}>
+            <option value="">-- Виберіть --</option>
+            {% for opt in options %}
+                <option value="{{ opt.value }}" {% if opt.value == value %}selected{% endif %}>
+                    {{ opt.label }}
+                </option>
+            {% endfor %}
+        </select>
+    {% else %}
+        <input type="{{ field_type|default:'text' }}" id="{{ field_id|default:field_name }}" 
+               name="{{ field_name }}" class="form-control" 
+               value="{{ value|default:'' }}" placeholder="{{ placeholder|default:'' }}"
+               {% if required %}required{% endif %} />
+    {% endif %}
+    
+    {% if help_text %}<small class="form-text text-muted">{{ help_text }}</small>{% endif %}
+</div>
