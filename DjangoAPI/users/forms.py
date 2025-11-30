@@ -52,3 +52,35 @@ class UserRegisterForm(UserCreationForm):
                 except Exception as e:
                     print(f"Error processing photo: {e}")
         return user
+
+
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(required=True, label='Email адреса')
+    
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if not User.objects.filter(email=email).exists():
+            raise forms.ValidationError('Користувач з такою email адресою не знайдений.')
+        return email
+
+
+class PasswordResetForm(forms.Form):
+    new_password1 = forms.CharField(
+        label='Новий пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Введіть новий пароль'})
+    )
+    new_password2 = forms.CharField(
+        label='Підтвердіть пароль',
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Повторіть пароль'})
+    )
+    
+    def clean(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError('Паролі не збігаються.')
+            if len(password1) < 8:
+                raise forms.ValidationError('Пароль має бути не менше 8 символів.')
+        return self.cleaned_data

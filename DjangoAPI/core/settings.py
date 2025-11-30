@@ -144,6 +144,15 @@ LOGIN_URL = '/login/'
 
 LOGIN_REDIRECT_URL = 'home'
 
+# Email Configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mailtrap.io'
+EMAIL_PORT = 2525
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'abc123def456'  # ← из Mailtrap
+EMAIL_HOST_PASSWORD = 'xyz789uvw012'  # ← из Mailtrap
+DEFAULT_FROM_EMAIL = 'noreply@djangomvt.com'
+
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = BASE_DIR / 'media' 
