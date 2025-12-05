@@ -76,3 +76,60 @@
     font-weight: 600;
     color: #333;
 }
+
+/* Google Sign-In Button */
+.btn-google {
+    background-color: #fff;
+    border: 1px solid #dadce0;
+    color: #3c4043;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+
+.btn-google:hover {
+    background-color: #f8f9fa;
+    border-color: #dadce0;
+    color: #3c4043;
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+}
+
+.btn-google:focus,
+.btn-google:active {
+    background-color: #f1f3f4;
+    border-color: #dadce0;
+    color: #3c4043;
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* Divider with text */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.divider-text {
+    padding: 0 1rem;
+    color: #6c757d;
+    font-size: 0.875rem;
+    font-weight: 500;
+}

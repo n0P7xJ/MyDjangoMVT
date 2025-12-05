@@ -27,6 +27,8 @@ urlpatterns = [
     path('api/', include('users.urls')),
     # Auth маршрути
     path('', include(('users.auth_urls', 'users'), namespace='users')),
+    # Django-allauth URLs
+    path('accounts/', include('allauth.urls')),
     # App маршрути
     path('categories/', include('categories.urls')),
     path('dishes/', include('dishes.urls')),

@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="registration-container">
+<div class="registration-container" data-recaptcha-site-key="{{ RECAPTCHA_SITE_KEY }}">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="register-card">
@@ -56,6 +56,11 @@
                             </div>
                         </div>
                         
+                        <!-- Cloudflare Turnstile CAPTCHA -->
+                        {% if RECAPTCHA_SITE_KEY %}
+                        <div class="cf-turnstile my-3" data-sitekey="{{ RECAPTCHA_SITE_KEY }}" data-theme="light"></div>
+                        {% endif %}
+                        
                         <button type="submit" class="btn btn-primary w-100 mt-3">Зареєструватись</button>
                     </form>
                 </div>
@@ -65,6 +70,9 @@
 </div>
 
 {% include 'registration/components/loading.html' %}
+
+<!-- Cloudflare Turnstile script -->
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 {% endblock %}
 
