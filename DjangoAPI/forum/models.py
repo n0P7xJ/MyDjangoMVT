@@ -72,11 +72,13 @@ class Post(models.Model):
     LINK = 'link'
     TEXT = 'text'
     IMAGE = 'image'
+    VIDEO = 'video'
     
     POST_TYPES = [
         (LINK, 'Link'),
         (TEXT, 'Text'),
         (IMAGE, 'Image'),
+        (VIDEO, 'Video'),
     ]
     
     title = models.CharField(max_length=300)
@@ -85,6 +87,7 @@ class Post(models.Model):
     post_type = models.CharField(max_length=10, choices=POST_TYPES, default=TEXT)
     link_url = models.URLField(blank=True, null=True)
     image = models.ImageField(upload_to='post_images/', blank=True, null=True)
+    video_url = models.URLField(blank=True, null=True, help_text='URL відео (YouTube, Vimeo, або пряме посилання)')
     
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='posts')

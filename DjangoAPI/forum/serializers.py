@@ -50,7 +50,7 @@ class PostListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'title', 'slug', 'content', 'post_type', 'link_url', 
-                  'image', 'author', 'community', 'created_at', 'updated_at',
+                  'image', 'video_url', 'author', 'community', 'created_at', 'updated_at',
                   'upvotes', 'downvotes', 'score', 'comments_count', 'user_vote',
                   'is_pinned', 'is_locked']
     
@@ -72,7 +72,7 @@ class PostDetailSerializer(PostListSerializer):
 class PostCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['title', 'content', 'post_type', 'link_url', 'image', 'community']
+        fields = ['title', 'content', 'post_type', 'link_url', 'image', 'video_url', 'community']
     
     def create(self, validated_data):
         validated_data['author'] = self.context['request'].user
