@@ -9,7 +9,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth.tokens import default_token_generator
 from django.urls import reverse 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response 
 from rest_framework.decorators import api_view, permission_classes
@@ -294,3 +294,102 @@ class CustomAuthToken(ObtainAuthToken):
             'username': user.username,
             'email': user.email
         })
+
+
+# API endpoints for React frontend
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def register_user(request):
+    """Register a new user"""
+    username = request.data.get('username')
+    email = request.data.get('email')
+    password = request.data.get('password')
+    
+    # Validation
+    if not username or not email or not password:
+        return Response(
+            {'message': 'All fields are required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    if len(password) < 8:
+        return Response(
+            {'message': 'Password must be at least 8 characters'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Check if user exists
+    if User.objects.filter(username=username).exists():
+        return Response(
+            {'message': 'Username already exists'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    if User.objects.filter(email=email).exists():
+        return Response(
+            {'message': 'Email already exists'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    try:
+        # Create user
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+        
+        # Generate token
+        token, created = Token.objects.get_or_create(user=user)
+        
+        return Response({
+            'access': token.key,
+            'refresh': token.key,
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email
+            }
+        }, status=status.HTTP_201_CREATED)
+        
+    except Exception as e:
+        return Response(
+            {'message': str(e)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def login_user(request):
+    """Login user"""
+    username = request.data.get('username')
+    password = request.data.get('password')
+    
+    if not username or not password:
+        return Response(
+            {'message': 'Username and password are required'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Authenticate user
+    user = authenticate(username=username, password=password)
+    
+    if user is None:
+        return Response(
+            {'message': 'Invalid credentials'},
+            status=status.HTTP_401_UNAUTHORIZED
+        )
+    
+    # Get or create token
+    token, created = Token.objects.get_or_create(user=user)
+    
+    return Response({
+        'access': token.key,
+        'refresh': token.key,
+        'user': {
+            'id': user.id,
+            'username': user.username,
+            'email': user.email
+        }
+    })

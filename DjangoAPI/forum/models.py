@@ -109,9 +109,26 @@ class Post(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.title)[:340] + '-' + str(self.id or '')
+            base_slug = slugify(self.title)[:340]
+            # Якщо пост новий, спочатку зберігаємо без slug
+            if not self.pk:
+                # Тимчасовий унікальний slug
+                import uuid
+                temp_slug = f"{base_slug}-{uuid.uuid4().hex[:8]}"
+                self.slug = temp_slug
+            else:
+                self.slug = f"{base_slug}-{self.pk}"
+        
         self.score = self.upvotes - self.downvotes
         super().save(*args, **kwargs)
+        
+        # Оновлюємо slug з правильним ID після першого збереження
+        if self.pk and not self.slug.endswith(str(self.pk)):
+            base_slug = slugify(self.title)[:340]
+            new_slug = f"{base_slug}-{self.pk}"
+            if new_slug != self.slug:
+                self.slug = new_slug
+                super().save(update_fields=['slug'])
     
     def __str__(self):
         return self.title
