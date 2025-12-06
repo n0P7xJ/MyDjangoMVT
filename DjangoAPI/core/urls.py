@@ -24,7 +24,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     # API маршрути
-    path('api/', include('users.urls')),
+    path('api/users/', include('users.urls')),
+    path('api/forum/', include('forum.urls')),
     # Auth маршрути
     path('', include(('users.auth_urls', 'users'), namespace='users')),
     # Django-allauth URLs
